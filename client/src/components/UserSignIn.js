@@ -3,10 +3,15 @@ import { NavLink } from 'react-router-dom';
 import {keyframes} from 'styled-components';
 import styled from 'styled-components';
 
+//Exporting Loading Animation
+
 export const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
+
+//Exporting Loading Animation
+
 export const Ball = styled.div`
   border: 16px solid #f3f3f3;
   border-radius: 50%;
@@ -26,14 +31,14 @@ class UserSignIn extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.userdata(this.email.value, this.pass.value)
+    this.props.userdata(this.email.value, this.pass.value) //passing sign-in state to App, for global use
   }
   render(props) {
     return (
       <div className="bounds" >
       {
         (this.props.loader)
-        ? <Ball />
+        ? <Ball /> //Loader
         : ""
       }
         <div className="grid-33 centered signin">

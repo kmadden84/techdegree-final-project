@@ -42,6 +42,9 @@ class Courses extends Component {
   }
   render(props) {
     var courseTile = [];
+
+    //mapping coure content, pushing HTML to courseTile
+
     for (var i = 0; i < this.state.courseContent.length; i++) {
       var id = this.state.courseContent[i].id;
       var title = this.state.courseContent[i].title;
@@ -61,6 +64,7 @@ class Courses extends Component {
         ? <Ball />
         : ""
       }
+        {/* rendering course tiles */}
         {courseTile}
         <div className="grid-33">
           <NavLink className="course--module course--add--module" to="/courses/create">

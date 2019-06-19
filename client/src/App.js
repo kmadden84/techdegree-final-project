@@ -47,6 +47,7 @@ class App extends Component {
               emailAddress: user,
               password: pass,
             });
+            //send to course list after successful login
             this.props.history.push("/");
           }
           response.json().then((responseJson) => {
@@ -54,6 +55,7 @@ class App extends Component {
               alert(responseJson.Error)
             }
             this.setState({
+              //getting first and last name of logged in user.
               firstName: responseJson["First Name"],
               lastName: responseJson["Last Name"]
             })
@@ -61,11 +63,13 @@ class App extends Component {
           })
         }).catch((error) => {
           reject(error);
+          //redirect to error page
           this.props.history.push("/error");
         })
     })
   }
   clearState = () => {
+    //logging out
     this.setState({
       emailAddress: "",
       password: "",
@@ -78,6 +82,7 @@ class App extends Component {
   render(props) {
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
+      //setting private Routes
       <Route {...rest} render={(props) => (
         this.state.emailAddress !== ""
           ? <Component {...props} password={this.state.password} user={this.state.emailAddress} />

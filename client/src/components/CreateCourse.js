@@ -5,8 +5,6 @@ class CreateCourse extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      successful: "",
-      unsuccessful: "",
       errorMessage: ""
     }
   }
@@ -36,14 +34,15 @@ class CreateCourse extends Component {
               successful: true
             });
             alert('Course Added');
+            //push to course list after course is added
             this.props.history.push("/");
           }
           response.json().then((responseJson) => {
             resolve(responseJson)
             if (responseJson) {
+              //set error messages
               this.setState({
                 errorMessage: responseJson,
-                unsuccessful: true
               });
             }
           })
@@ -56,6 +55,7 @@ class CreateCourse extends Component {
   }
   render(props) {
     let error = [];
+    //mapping error messages, pushing to error variable
     Object.keys(this.state.errorMessage).map(i =>
       error.push(this.state.errorMessage[i])
     )

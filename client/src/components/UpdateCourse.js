@@ -51,6 +51,7 @@ class UpdateCourse extends Component {
               // alert('Only the content creator may update this course')
               this.props.history.push("/forbidden");
              }
+             //setting states to manage course fields
             Object.entries(this.state.courseContent).map(([key, value], i) => {
               this.setState({
                 title: value.title,
@@ -79,10 +80,10 @@ class UpdateCourse extends Component {
      this.props.history.push("/forbidden");
     }
     else {
+      //update request
       return new Promise((resolve, reject) => {
         fetch('http://localhost:5000/api/courses/' + target + '', {
           method: "PUT",
-          //mode: "cors",
           headers: {
             'Authorization': 'Basic ' + btoa(user + ':' + pass),
             'Content-Type': 'application/json'
@@ -99,9 +100,9 @@ class UpdateCourse extends Component {
               alert('The Course has been updated');
               this.props.history.push("/");
             }
+            //if update unsuccessful, alert why
             else {
               response.json().then((responseJson) => {
-                console.log(responseJson)
                 alert(responseJson.Error);
                 resolve(responseJson)
               })
@@ -114,6 +115,7 @@ class UpdateCourse extends Component {
     }
   }
   handleChange(e) {
+    //allowing input values to be dynamically changed.s
     this.setState({
       [e.target.name]: e.target.value
     });

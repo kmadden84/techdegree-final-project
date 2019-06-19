@@ -15,8 +15,13 @@ class UserSignUp extends Component {
       loader:true,
     });
     e.preventDefault();
-    if (!this.firstName.value || !this.firstName.value || !this.firstName.value || !this.firstName.value || !this.firstName.value) {
+
+    //validating that all fields are entered
+    if (!this.firstName.value || !this.lastName.value || !this.emailAddress.value || !this.pass.value) {
       alert('Required Fields Missing')
+      this.setState({
+        loader:false,
+      });
     }
 
     else {
@@ -30,6 +35,7 @@ class UserSignUp extends Component {
             "firstName": this.firstName.value,
             "lastName": this.lastName.value,
             "emailAddress": this.emailAddress.value,
+            //validating that password matches confirm pass before it's passed to post request
             "password": (this.pass.value !== this.passConfirm.value) ? alert('passwords dont match') : this.pass.value
           })
         })
@@ -38,6 +44,7 @@ class UserSignUp extends Component {
               loader: false
             });
             if (response.status === 200) {
+            //if signup successful, pass login credentials to global state
               this.props.userdata(this.emailAddress.value, this.pass.value)
               this.props.history.push("/");
             }
