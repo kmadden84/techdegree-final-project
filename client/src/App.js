@@ -11,6 +11,10 @@ import Forbidden from './components/Forbidden';
 
 import Header from './components/Header';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { createBrowserHistory } from 'history'
+export const history = createBrowserHistory();
+
+
 
 class App extends Component {
   constructor(props) {
@@ -47,8 +51,8 @@ class App extends Component {
               emailAddress: user,
               password: pass,
             });
-            //send to course list after successful login
-            this.props.history.push("/");
+            //send to previous page after successful login
+            history.goBack()
           }
           response.json().then((responseJson) => {
             if (response.status === 401) {
