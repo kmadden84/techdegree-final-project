@@ -8,31 +8,32 @@ import UpdateCourse from './components/UpdateCourse';
 import UserSignOut from './components/UserSignOut';
 import NoResults from './components/NoResults';
 import Forbidden from './components/Forbidden';
-
 import Header from './components/Header';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { createBrowserHistory } from 'history'
 export const history = createBrowserHistory();
 
-
-
 class App extends Component {
+
   constructor(props) {
     super(props)
+
     this.state = {
-      emailAddress: "",
-      password: "",
-      firstName: "",
-      lastName: "",
-      loader: false,
+      emailAddress: Cookies.get("name"),
+      password: Cookies.get("password"),
+      firstName: Cookies.get("firstName"),
+      lastName: Cookies.get("lastName"),
       detailsLoader: ""
     }
+
     this.signIn = this.signIn.bind(this);
     this.clearState = this.clearState.bind(this);
+
   }
   signIn = (user, pass) => {
     this.setState({
-      loader:true,
+      loader: true,
     });
     return new Promise((resolve, reject) => {
       fetch("http://localhost:5000/api/users", {
@@ -44,26 +45,33 @@ class App extends Component {
       })
         .then((response) => {
           this.setState({
-              loader:false,
+            loader: false,
           });
-          if (response.status === 200) {
-            this.setState({
-              emailAddress: user,
-              password: pass,
-            });
-            //send to previous page after successful login
-            history.goBack()
-          }
+
           response.json().then((responseJson) => {
+            if (response.status === 200) {
+              console.log(responseJson)
+              Cookies.set('name', responseJson["Email"], { path: '/' });
+              Cookies.set('password', responseJson["Pass"], { path: '/' });
+              this.setState({
+                emailAddress: user,
+                password: pass
+              });
+            }
             if (response.status === 401) {
               alert(responseJson.Error)
             }
+            Cookies.set('firstName', responseJson["First Name"], { path: '/' });
+            Cookies.set('lastName', responseJson["Last Name"], { path: '/', });
             this.setState({
-              //getting first and last name of logged in user.
               firstName: responseJson["First Name"],
               lastName: responseJson["Last Name"]
             })
-
+            if (this.props.history.location.pathname !== "/signin") {
+              history.goBack()
+            } else {
+              history.goBack()
+            }
           })
         }).catch((error) => {
           reject(error);
@@ -72,19 +80,22 @@ class App extends Component {
         })
     })
   }
-  clearState = () => {
-    //logging out
+  clearState = (props) => {
     this.setState({
       emailAddress: "",
       password: "",
       firstName: "",
       lastName: ""
     });
-    this.props.history.push("/signin");
+    Object.keys(Cookies.get()).forEach(function (cookieName) {
+      var neededAttributes = { path: '' };
+      Cookies.remove(cookieName, neededAttributes);
+    });
+
+    this.props.history.push("/");
   }
 
   render(props) {
-
     const PrivateRoute = ({ component: Component, ...rest }) => (
       //setting private Routes
       <Route {...rest} render={(props) => (
@@ -98,7 +109,7 @@ class App extends Component {
         <Route path="*" render={(props) => <Header currentState={this.state} signout={this.clearState} {...props} />} />
         <Switch>
           <Route exact path="/" render={(props) => <Courses {...props} />} />
-          <Route path="/signout" exact={true} render={(props) => <UserSignOut signout={this.clearState} {...props} />} />
+          <Route path={`${this.props.match.path}signout`} exact={true} render={(props) => <UserSignOut signout={this.clearState} {...props} />} />
           <Route path={`${this.props.match.path}signin`} render={(props) => <UserSignIn loader={this.state.loader} currentState={this.state} userdata={this.signIn} {...props} />} />
           <PrivateRoute path={`${this.props.match.path}courses/create`} component={CreateCourse} />
           <PrivateRoute exact path={`${this.props.match.path}courses/:id/update`} component={UpdateCourse} />
