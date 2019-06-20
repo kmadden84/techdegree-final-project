@@ -4,9 +4,6 @@ class UserSignOut extends Component {
   componentDidMount(props) {
     this.props.signout();
   }
-  componentDidUpdate(props) {
-    this.props.signout();
-  }
   render() {
     return (null)
   }

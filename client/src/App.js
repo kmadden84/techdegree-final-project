@@ -20,12 +20,13 @@ class App extends Component {
     super(props)
 
     this.state = {
-      emailAddress: Cookies.get("name"),
-      password: Cookies.get("password"),
-      firstName: Cookies.get("firstName"),
-      lastName: Cookies.get("lastName"),
+      emailAddress: (Cookies.get("name")) ? Cookies.get("name") : "",
+      password: (Cookies.get("password")) ? Cookies.get("password") : "",
+      firstName: (Cookies.get("firstName")) ? Cookies.get("firstName") : "",
+      lastName: (Cookies.get("lastName")) ? Cookies.get("lastName") : "",
       detailsLoader: ""
     }
+    console.log(this.state.emailAddress)
 
     this.signIn = this.signIn.bind(this);
     this.clearState = this.clearState.bind(this);
@@ -51,8 +52,8 @@ class App extends Component {
           response.json().then((responseJson) => {
             if (response.status === 200) {
               console.log(responseJson)
-              Cookies.set('name', responseJson["Email"], { path: '/' });
-              Cookies.set('password', responseJson["Pass"], { path: '/' });
+              Cookies.set('name', user, { path: '/' });
+              Cookies.set('password', pass, { path: '/' });
               this.setState({
                 emailAddress: user,
                 password: pass
@@ -91,6 +92,9 @@ class App extends Component {
       var neededAttributes = { path: '' };
       Cookies.remove(cookieName, neededAttributes);
     });
+
+
+    console.log(this.state.password)
 
     this.props.history.push("/");
   }
