@@ -7,7 +7,6 @@ class Header extends Component {
     Object.keys(this.props.currentState).map(i =>
       userData.push(this.props.currentState[i])
     )
-    console.log('header')
     return (
       <div className="header">
         <div className="bounds">

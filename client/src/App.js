@@ -51,7 +51,6 @@ class App extends Component {
 
           response.json().then((responseJson) => {
             if (response.status === 200) {
-              console.log(responseJson)
               Cookies.set('name', user, { path: '/' });
               Cookies.set('password', pass, { path: '/' });
               this.setState({
@@ -92,9 +91,6 @@ class App extends Component {
       var neededAttributes = { path: '' };
       Cookies.remove(cookieName, neededAttributes);
     });
-
-
-    console.log(this.state.password)
 
     this.props.history.push("/");
   }
